@@ -4,7 +4,8 @@ Base settings to build other settings files upon.
 
 import environ
 
-ROOT_DIR = environ.Path(__file__) - 3  # ({{ cookiecutter.project_slug }}/config/settings/base.py - 3 = {{ cookiecutter.project_slug }}/)
+# ({{ cookiecutter.project_slug }}/config/settings/base.py - 3 = {{ cookiecutter.project_slug }}/)
+ROOT_DIR = environ.Path(__file__) - 3
 APPS_DIR = ROOT_DIR.path('{{ cookiecutter.project_slug }}')
 
 env = environ.Env()
@@ -37,7 +38,7 @@ USE_TZ = True
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-{% if cookiecutter.use_docker == 'y' -%}
+{ % if cookiecutter.use_docker == 'y' - %}
 DATABASES = {
     'default': env.db('DATABASE_URL'),
 }
@@ -73,6 +74,21 @@ THIRD_PARTY_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail.core',
+
+    'modelcluster',
+    'taggit',
+
 ]
 LOCAL_APPS = [
     '{{ cookiecutter.project_slug }}.users.apps.UsersAppConfig',
@@ -140,6 +156,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'wagtail.core.middleware.SiteMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 # STATIC
@@ -236,7 +254,7 @@ ADMINS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
-{% if cookiecutter.use_celery == 'y' -%}
+{ % if cookiecutter.use_celery == 'y' - %}
 # Celery
 # ------------------------------------------------------------------------------
 INSTALLED_APPS += ['{{cookiecutter.project_slug}}.taskapp.celery.CeleryAppConfig']
@@ -275,7 +293,7 @@ ACCOUNT_ADAPTER = '{{cookiecutter.project_slug}}.users.adapters.AccountAdapter'
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = '{{cookiecutter.project_slug}}.users.adapters.SocialAccountAdapter'
 
-{% if cookiecutter.use_compressor == 'y' -%}
+{ % if cookiecutter.use_compressor == 'y' - %}
 # django-compressor
 # ------------------------------------------------------------------------------
 # https://django-compressor.readthedocs.io/en/latest/quickstart/#installation
@@ -285,3 +303,4 @@ STATICFILES_FINDERS += ['compressor.finders.CompressorFinder']
 {%- endif %}
 # Your stuff...
 # ------------------------------------------------------------------------------
+WAGTAIL_SITE_NAME = '{{cookiecutter.project_name}}'

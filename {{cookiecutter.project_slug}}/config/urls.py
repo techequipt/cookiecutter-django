@@ -1,9 +1,13 @@
 from django.conf import settings
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from wagtail.admin import urls as wagtailadmin_urls
+from wagtail.documents import urls as wagtaildocs_urls
+from wagtail.core import urls as wagtail_urls
+
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
@@ -20,6 +24,9 @@ urlpatterns = [
         include("{{ cookiecutter.project_slug }}.users.urls", namespace="users"),
     ),
     path("accounts/", include("allauth.urls")),
+    re_path(r'^cms/', include(wagtailadmin_urls)),
+    re_path(r'^documents/', include(wagtaildocs_urls)),
+    re_path(r'', include(wagtail_urls)),
     # Your stuff: custom urls includes go here
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
@@ -28,7 +35,7 @@ urlpatterns = [
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
     # these url in browser to see how these error pages look like.
-    urlpatterns += [
+    urlpatterns = [
         path(
             "400/",
             default_views.bad_request,
@@ -45,7 +52,7 @@ if settings.DEBUG:
             kwargs={"exception": Exception("Page not Found")},
         ),
         path("500/", default_views.server_error),
-    ]
+    ] + urlpatterns
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar
 
