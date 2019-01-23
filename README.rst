@@ -1,4 +1,4 @@
-Cookiecutter Django
+Cookiecutter Django (w/ Wagtail)
 =======================
 
 .. image:: https://travis-ci.org/pydanny/cookiecutter-django.svg?branch=master
@@ -55,6 +55,9 @@ Features
 * Customizable PostgreSQL version
 
 .. _`maintained Foundation fork`: https://github.com/Parbhat/cookiecutter-django-foundation
+
+# TechEquipt addons:
+* Wagtail install
 
 
 Optional Integrations
